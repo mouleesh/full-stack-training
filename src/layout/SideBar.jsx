@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { Home, QuestionAnswer } from '@mui/icons-material';
+import { Home, QuestionAnswer, Subject } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 
 const selectedMenuStyles = {
@@ -30,6 +30,15 @@ function SideBar() {
                             <QuestionAnswer sx={{color: location.pathname === "/interview-questions" ? "white" : ""}}/>
                         </ListItemIcon>
                         <ListItemText primary="Interview Questions" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding sx={location.pathname === "/subjects" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('/subjects')}}>
+                        <ListItemIcon>
+                            <Subject sx={{color: location.pathname === "/subjects" ? "white" : ""}}/>
+                        </ListItemIcon>
+                        <ListItemText primary="Subjects" />
                     </ListItemButton>
                 </ListItem>
                 
