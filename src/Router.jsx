@@ -3,7 +3,7 @@ import Layout from './layout/Layout';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ListInterviewQuestions from './interview-questions/List';
 import NotFoundPage from './NotFoundPage';
-import Subjects from './layout/subjectSlide';
+import Subjects from './subject/Subject';
 
 function Router() {
   return (
