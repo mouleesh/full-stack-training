@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import CreateModal from './CreateModal';
 import AnswerModal from './AnswerModal';
+import axios from 'axios';
 
 function List() {
     const [questions, setQuestions] = useState([]);
@@ -11,22 +12,13 @@ function List() {
     const [answerModal, setAnswerModal] = useState(false);
 
     useEffect(() => {
-        setQuestions([
-            {
-                id: 1,
-                question: "What are states and props in React?",
-                answer: "States are mutable and props are immutable.",
-                subject: "React JS",
-                topic: "Hooks",
-            },
-            {
-                id: 2,
-                question: "What are component lifecycle methods in React?",
-                answer: "Component lifecycle methods are methods that are called at different stages of a component's lifecycle.",
-                subject: "React JS",
-                topic: "Component Lifecycle",
-            }
-        ])
+        
+        axios.get('http://localhost:4000/questions')
+        .then((response) => {
+            setQuestions(response.data);
+        });
+
+
     }, []) //This runs after mounting of component.
 
     const handleClose = () => {
