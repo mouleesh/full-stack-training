@@ -1,8 +1,9 @@
 import { Delete, Edit } from '@mui/icons-material';
-import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import TopicModal from './TopicModal';
 import "./subject.css";
+import CreateTopicModal from './CreateTopicModal';
 
 function Subject() {
     const [subjects, setSubjects] = React.useState([]);
@@ -72,13 +73,21 @@ function Subject() {
         ])
     }, [])
 
+    const style = {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "20px"
+    };
+
     return (
-        <>
+        <> 
             <TopicModal 
                 isTopicModalOpen={isTopicModalOpen} 
                 handleClose={() => {setIsTopicModalOpen(false); setSelectedSubject(null);}}
                 selectedSubject={selectedSubject}/>
             <Box>
+               <Box sx={style}> <Typography variant="h5" component="h2" sx={{fontWeight: "bold"}}> <CreateTopicModal /></Typography> </Box>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -120,8 +129,9 @@ function Subject() {
                     </TableBody>
                 </Table>
             </Box>
-        </>          
+        </> 
     )
+    
 }
 
 export default Subject;
