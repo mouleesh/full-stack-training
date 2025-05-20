@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import ListInterviewQuestions from './interview-questions/List';
 import NotFoundPage from './NotFoundPage';
 import Subjects from './subject/Subject';
+import Login from './auth/Login';
 
 function Router() {
   return (
@@ -15,6 +16,7 @@ function Router() {
           <Route path='/home' element={<p>This is home comp</p>} />
           <Route path='/subjects' element={<Subjects/>} />
         </Route>
+        <Route path="/login" element={<Login />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
 

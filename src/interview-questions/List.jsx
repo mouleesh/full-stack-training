@@ -5,6 +5,7 @@ import AnswerModal from './AnswerModal';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setQuestionsInStore } from '../slices/questionSlice';
+import { API_URL } from '../../constant';
 
 function List() {
     const [isPending, startTransition] = useTransition()
@@ -20,7 +21,7 @@ function List() {
     const questionsFromStore = useSelector((store) => store.questions.questions);
 
     useEffect(() => {
-        axios.get('http://localhost:4000/questions')
+        axios.get(`${API_URL}/questions`)
         .then((response) => {
             setQuestions(response.data); // This is where we set the questions in the state
             dispatch(setQuestionsInStore(response.data)); // This is where we set the questions in the redux store
