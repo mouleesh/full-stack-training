@@ -23,6 +23,8 @@ function AnswerModal({open, handleClose, selectedQuestion}) {
             <Typography id="modal-modal-title" variant="h6" component="h2">
                 Answer
             </Typography>
+            <br />
+            <b>Q: {selectedQuestion?.question}</b>
             <Box sx={{display: "flex", flexDirection: "column", gap: 2, marginTop: 2}}>
                 <TextareaAutosize 
                     sx={{width: "100%", marginTop: "10px"}}

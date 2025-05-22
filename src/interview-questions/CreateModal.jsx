@@ -1,4 +1,5 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, TextareaAutosize, Typography } from '@mui/material'
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
 const style = {
@@ -122,7 +123,15 @@ function CreateModal({open, handleClose}) {
     }
 
     const handleSubmit = () => {
-        console.log("Question Details: ", questionDetails);
+        
+        const payload = {
+            question: questionDetails.question,
+            answer: questionDetails.answer,
+        }
+        axios.post('http://localhost:4000/questions', payload).then((response) => {
+            console.log(response.data);
+            
+        })
     }
 
     const handleReset = () => {

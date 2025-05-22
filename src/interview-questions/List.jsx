@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import { Box, Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import React, { useEffect, useState, useTransition } from 'react'
+import { Box, Button, CircularProgress, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import CreateModal from './CreateModal';
 import AnswerModal from './AnswerModal';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { setQuestionsInStore } from '../slices/questionSlice';
+import { API_URL } from '../../constant';
 
 function List() {
+    const [isPending, startTransition] = useTransition()
+    const dispatch = useDispatch();
+
     const [questions, setQuestions] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [selectedQuestion, setSelectedQuestion] = useState(null);
 
     const [createQuestionModal, setCreateQuestionModal] = useState(false);
     const [answerModal, setAnswerModal] = useState(false);
+    
+    const questionsFromStore = useSelector((store) => store.questions.questions);
 
     useEffect(() => {
-        setQuestions([
-            {
-                id: 1,
-                question: "What are states and props in React?",
-                answer: "States are mutable and props are immutable.",
-                subject: "React JS",
-                topic: "Hooks",
-            },
-            {
-                id: 2,
-                question: "What are component lifecycle methods in React?",
-                answer: "Component lifecycle methods are methods that are called at different stages of a component's lifecycle.",
-                subject: "React JS",
-                topic: "Component Lifecycle",
-            }
-        ])
-    }, []) //This runs after mounting of component.
+        axios.get(`${API_URL}/questions`)
+        .then((response) => {
+            setQuestions(response.data); // This is where we set the questions in the state
+            dispatch(setQuestionsInStore(response.data)); // This is where we set the questions in the redux store
+
+            startTransition(() => {
+                setLoading(false);
+            });
+
+        }).catch((error) => {
+            console.error("Error fetching questions:", error);
+            setLoading(false);
+        });
+    }, []); //This runs after mounting of component.
 
     const handleClose = () => {
         setCreateQuestionModal(false);
@@ -39,6 +46,13 @@ function List() {
                 <div style={{display: "flex", justifyContent: "flex-end"}}>
                     <Button onClick={() => setCreateQuestionModal(true)} variant='contained'>Create Question</Button>
                 </div>
+                
+                {loading === true 
+                ? 
+                <div style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                    <CircularProgress />
+                </div> 
+                : 
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -48,9 +62,9 @@ function List() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {questions.map(question => (
-                            <TableRow key={question.id}>
-                                <TableCell>{question.id}</TableCell>
+                        {questionsFromStore.map((question, index) => (
+                            <TableRow key={question._id}>
+                                <TableCell>{index + 1}</TableCell>
                                 <TableCell>{question.question}</TableCell>
                                 <TableCell>
                                     <Button 
@@ -66,7 +80,8 @@ function List() {
                             </TableRow>
                         ))}
                     </TableBody>
-                </Table>
+                </Table>}
+                
             </Box>
             <CreateModal open={createQuestionModal} handleClose={handleClose}/>
             <AnswerModal 
