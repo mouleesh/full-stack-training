@@ -14,7 +14,7 @@ function Layout() {
             <SideBar />
             
             {/* Main content */}
-            <Box width={"100%"}>
+            <Box sx={{ ml: "240px", width: "100%" }}>
                 <Container sx={{ py: 3 }}>
                     <Outlet />
                 </Container>
