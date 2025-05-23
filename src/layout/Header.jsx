@@ -7,7 +7,7 @@ function Header() {
   const ColorSubHeader = ColorWrapperHOC(SubHeader);
 
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{height: "60px", backgroundColor: ""}}>
         <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
             <Typography variant='h6'>Full Stack Training</Typography>
 

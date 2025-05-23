@@ -1,6 +1,9 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, TextareaAutosize, Typography } from '@mui/material'
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { API_URL } from '../../constant';
+import { useDispatch } from 'react-redux';
+import { setQuestionsInStore } from '../slices/questionSlice';
 
 const style = {
     position: 'absolute',
@@ -14,97 +17,20 @@ const style = {
     p: 4,
 };
 
-function CreateModal({open, handleClose}) {
-    const [subjects, setSubjects] = useState([]);
+const initialState = {
+    question: "",
+    answer: "",
+    subject: "",
+    topic: "",
+    codeSnippet: "",
+    example: ""
+}
+
+function CreateModal({open, handleClose, subjects, questionsFromStore}) {
+    const dispatch = useDispatch();
     const [topics, setTopics] = useState([]);
 
-    const [questionDetails, setQuestionDetails] = useState({
-        question: "",
-        answer: "",
-        subject: "",
-        topic: ""
-    });
-
-    useEffect(() => {
-        setSubjects([
-            {
-                id: 1,
-                name: "Javascript",
-                topics: [
-                    {
-                        id: 1,
-                        name: "Closure"
-                    },
-                    {
-                        id: 2,
-                        name: "Callbacks"
-                    },
-                    {
-                        id: 3,
-                        name: "Hoisting"
-                    },
-                    {
-                        id: 4,
-                        name: "Promises"
-                    }
-                ]
-            },
-            {
-                id: 2,
-                name: "React JS",
-                topics: [
-                    {
-                        id: 1,
-                        name: "Hooks"
-                    },
-                    {
-                        id: 2,
-                        name: "State Management"
-                    },
-                    {
-                        id: 3,
-                        name: "Component Lifecycle"
-                    }
-                ]
-            },
-            {
-                id: 3,
-                name: "Node JS",
-                topics: [
-                    {
-                        id: 1,
-                        name: "Express"
-                    },
-                    {
-                        id: 2,
-                        name: "MongoDB"
-                    },
-                    {
-                        id: 3,
-                        name: "Mongoose"
-                    }
-                ]
-            },
-            {
-                id: 4,
-                name: "Typescript",
-                topics: [
-                    {
-                        id: 1,
-                        name: "Types"
-                    },
-                    {
-                        id: 2,
-                        name: "Interfaces"
-                    },
-                    {
-                        id: 3,
-                        name: "Generics"
-                    }
-                ]
-            }
-        ])
-    }, [])
+    const [questionDetails, setQuestionDetails] = useState(initialState);
 
     const handleSubjectChange = (event) => {
         const subjectId = event.target.value;
@@ -113,7 +39,7 @@ function CreateModal({open, handleClose}) {
             subject: subjectId,
             topic: ""
         });
-        const selectedSubject = subjects.find(subject => subject.id === subjectId);
+        const selectedSubject = subjects.find(subject => subject._id === subjectId);
 
         if (selectedSubject) {
             setTopics(selectedSubject.topics);
@@ -123,24 +49,28 @@ function CreateModal({open, handleClose}) {
     }
 
     const handleSubmit = () => {
-        
         const payload = {
             question: questionDetails.question,
             answer: questionDetails.answer,
-        }
-        axios.post('http://localhost:4000/questions', payload).then((response) => {
-            console.log(response.data);
+            subject: questionDetails.subject,
+            topic: questionDetails.topic,
+            codeSnippet: questionDetails?.codeSnippet,
+            example: questionDetails?.example
+        };
+
+        axios.post(`${API_URL}/questions`, payload).then((response) => {
+            dispatch(setQuestionsInStore([...questionsFromStore, response.data]));
+            setQuestionDetails(initialState);
+            setTopics([]);
+            handleClose();
             
-        })
+        }).catch((error) => {
+            console.error("Error creating question:", error);
+        });
     }
 
     const handleReset = () => {
-        setQuestionDetails({
-            question: "",
-            answer: "",
-            subject: "",
-            topic: ""
-        });
+        setQuestionDetails(initialState);
         setTopics([]);
     }
 
@@ -153,6 +83,34 @@ function CreateModal({open, handleClose}) {
                 <Typography variant="h5" component="h2" sx={{fontWeight: "bold"}}> Create Question </Typography>
 
                 <Box sx={{display: "flex", flexDirection: "column", gap: 2, marginTop: 2}}>
+                    <FormControl fullWidth>
+                        <InputLabel id="question-create-subject">Subject</InputLabel>
+                        <Select
+                            labelId="question-create-subject"
+                            value={questionDetails.subject}
+                            label="Subject"
+                            onChange={handleSubjectChange}
+                        >
+                            {subjects.map(subject => (
+                                <MenuItem key={subject._id} value={subject._id}>{subject.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <FormControl fullWidth>
+                        <InputLabel id="question-create-topic">Topic</InputLabel>
+                        <Select
+                            labelId="question-create-topic"
+                            value={questionDetails.topic}
+                            label="Topic"
+                            onChange={(e) => setQuestionDetails({...questionDetails, topic: e.target.value})}
+                        >
+                            {topics.map(topic => (
+                                <MenuItem key={topic._id} value={topic._id}>{topic.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
                     <TextareaAutosize 
                         minRows={5}
                         value={questionDetails.question}
@@ -169,33 +127,21 @@ function CreateModal({open, handleClose}) {
                         style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
                     />
 
-                    <FormControl fullWidth>
-                        <InputLabel id="question-create-subject">Subject</InputLabel>
-                        <Select
-                            labelId="question-create-subject"
-                            value={questionDetails.subject}
-                            label="Subject"
-                            onChange={handleSubjectChange}
-                        >
-                            {subjects.map(subject => (
-                                <MenuItem key={subject.id} value={subject.id}>{subject.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <TextareaAutosize 
+                        minRows={5}
+                        value={questionDetails.codeSnippet}
+                        onChange={(e) => setQuestionDetails({...questionDetails, codeSnippet: e.target.value})}
+                        placeholder="Code Snippet (optional)"
+                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
+                    />
 
-                    <FormControl fullWidth>
-                        <InputLabel id="question-create-topic">Topic</InputLabel>
-                        <Select
-                            labelId="question-create-topic"
-                            value={questionDetails.topic}
-                            label="Topic"
-                            onChange={(e) => setQuestionDetails({...questionDetails, topic: e.target.value})}
-                        >
-                            {topics.map(topic => (
-                                <MenuItem key={topic.id} value={topic.id}>{topic.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <TextareaAutosize 
+                        minRows={5}
+                        value={questionDetails.example}
+                        onChange={(e) => setQuestionDetails({...questionDetails, example: e.target.value})}
+                        placeholder="Example (optional)"
+                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
+                    />
                     
                     <Grid container spacing={2} sx={{marginTop: 2, justifyContent: "center"}}>
                         <Grid item xs={4}>
