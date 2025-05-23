@@ -1,44 +1,46 @@
-import React, { useEffect } from 'react';
-import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
 import { Home, QuestionAnswer, Subject } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
+import "./sideBar.css";
 
-const selectedMenuStyles = {
-    backgroundColor: "#5a8d03",
-    color: "white"
-}
 
 function SideBar() {
     const navigate = useNavigate();
+    const theme = useTheme();
+
+    const selectedMenuStyles = {
+        backgroundColor: theme.palette.primary.main,
+        color: "white"
+    }
 
     return (
-        <Box component="nav" sx={{ width: 240, flexShrink: 0, backgroundColor: "lightgray" }}>
+        <Box position={"fixed"} component="nav" sx={{ width: 240, flexShrink: 0, backgroundColor: "lightgray", height: "100vh"}}>
             <nav>
             <List>
-                <ListItem disablePadding sx={location.pathname === "/home" ? selectedMenuStyles : {}}>
-                    <ListItemButton onClick={() => {navigate('/home')}}>
+                <ListItem className={'side-menu-option'} disablePadding sx={location.pathname === "/admin/home" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('home')}}>
                         <ListItemIcon>
-                            <Home sx={{color: location.pathname === "/home" ? "white" : ""}}/>
+                            <Home sx={{color: location.pathname === "/admin/home" ? "white" : ""}}/>
                         </ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding sx={location.pathname === "/interview-questions" ? selectedMenuStyles : {}}>
-                    <ListItemButton onClick={() => {navigate('/interview-questions')}}>
+                <ListItem disablePadding sx={location.pathname === "/admin/interview-questions" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('interview-questions')}}>
                         <ListItemIcon>
-                            <QuestionAnswer sx={{color: location.pathname === "/interview-questions" ? "white" : ""}}/>
+                            <QuestionAnswer sx={{color: location.pathname === "admin/interview-questions" ? "white" : ""}}/>
                         </ListItemIcon>
                         <ListItemText primary="Interview Questions" />
                     </ListItemButton>
                 </ListItem>
 
-                <ListItem disablePadding sx={location.pathname === "/subjects" ? selectedMenuStyles : {}}>
-                    <ListItemButton onClick={() => {navigate('/subjects')}}>
+                <ListItem disablePadding sx={location.pathname === "/admin/subjects" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('subjects')}}>
                         <ListItemIcon>
-                            <Subject sx={{color: location.pathname === "/subjects" ? "white" : ""}}/>
+                            <Subject sx={{color: location.pathname === "/admin/subjects" ? "white" : ""}}/>
                         </ListItemIcon>
-                        <ListItemText primary="Subjects" />
+                        <ListItemText primary="Subjects & Topics" />
                     </ListItemButton>
                 </ListItem>
                 

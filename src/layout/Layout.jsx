@@ -5,10 +5,10 @@ import SideBar from './SideBar';
 import { Outlet } from 'react-router';
 
 function Layout() {
-  return (<>
+  return (<Box sx={{ flexGrow: 1 }}>
     <Header />
 
-    <Box sx={{ display: 'flex', minHeight: '100vh', direction: 'column' }}>
+    <Box sx={{ display: 'flex', mt: "60px", minHeight: 'calc(100vh - 60px)', direction: 'column' }}>
         {/* Side Bar */}
         <Box sx={{ display: 'flex', flexGrow: 1 }}>
             <SideBar />
@@ -25,7 +25,7 @@ function Layout() {
         </Box>
         
     </Box>
-  </>)
+  </Box>)
 }
 
 export default Layout

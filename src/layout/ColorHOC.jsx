@@ -2,7 +2,7 @@ const ColorWrapperHOC = (WrappedComponent) =>{
     return function func(){
         return (
             <>
-                <WrappedComponent color="blue" />
+                <WrappedComponent color="white" />
             </>
         )
     }
