@@ -1,5 +1,5 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, useTheme } from '@mui/material';
-import { Home, QuestionAnswer, Subject } from '@mui/icons-material';
+import { Dashboard, Group, MarkUnreadChatAlt, QuestionAnswer, Subject } from '@mui/icons-material';
 import { useNavigate } from 'react-router';
 import "./sideBar.css";
 
@@ -17,12 +17,12 @@ function SideBar() {
         <Box position={"fixed"} component="nav" sx={{ width: 240, flexShrink: 0, backgroundColor: "lightgray", height: "100vh"}}>
             <nav>
             <List>
-                <ListItem className={'side-menu-option'} disablePadding sx={location.pathname === "/admin/home" ? selectedMenuStyles : {}}>
-                    <ListItemButton onClick={() => {navigate('home')}}>
+                <ListItem className={'side-menu-option'} disablePadding sx={location.pathname === "/admin/dashboard" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('dashboard')}}>
                         <ListItemIcon>
-                            <Home sx={{color: location.pathname === "/admin/home" ? "white" : ""}}/>
+                            <Dashboard sx={{color: location.pathname === "/admin/dashboard" ? "white" : ""}}/>
                         </ListItemIcon>
-                        <ListItemText primary="Home" />
+                        <ListItemText primary="Dashboard" />
                     </ListItemButton>
                 </ListItem>
 
@@ -41,6 +41,24 @@ function SideBar() {
                             <Subject sx={{color: location.pathname === "/admin/subjects" ? "white" : ""}}/>
                         </ListItemIcon>
                         <ListItemText primary="Subjects & Topics" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding sx={location.pathname === "/admin/users" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('users')}}>
+                        <ListItemIcon>
+                            <Group sx={{color: location.pathname === "/admin/users" ? "white" : ""}}/>
+                        </ListItemIcon>
+                        <ListItemText primary="Manage Users" />
+                    </ListItemButton>
+                </ListItem>
+
+                <ListItem disablePadding sx={location.pathname === "/admin/contact-form" ? selectedMenuStyles : {}}>
+                    <ListItemButton onClick={() => {navigate('contact-form')}}>
+                        <ListItemIcon>
+                            <MarkUnreadChatAlt sx={{color: location.pathname === "/admin/contact-form" ? "white" : ""}}/>
+                        </ListItemIcon>
+                        <ListItemText primary="Contact Form" />
                     </ListItemButton>
                 </ListItem>
                 

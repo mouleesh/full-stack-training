@@ -1,8 +1,8 @@
-import React from 'react'
 import { Box, Container } from '@mui/material';
 import Header from './Header';
 import SideBar from './SideBar';
 import { Outlet } from 'react-router';
+import Footer from './Footer';
 
 function Layout() {
   return (<Box sx={{ flexGrow: 1 }}>
@@ -20,11 +20,13 @@ function Layout() {
                 </Container>
             </Box>
         </Box>
-        <Box sx={{ backgroundColor: "grey", height: "40px", width: "100%", position: "fixed", bottom: 0 }}>
+        {/* <Box sx={{ backgroundColor: "grey", height: "40px", width: "100%", position: "fixed", bottom: 0 }}>
             <p style={{ color: "white", textAlign: "center", marginTop: "10px" }}>© 2025 Full Stack Training</p>
-        </Box>
+        </Box> */}
+
         
     </Box>
+    <Footer />
   </Box>)
 }
 

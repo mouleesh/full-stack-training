@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { API_URL } from '../../constant';
+import { API_URL } from '../../../constant';
 
 function List() {
     const [subjects, setSubjects] = React.useState([]);
@@ -100,9 +100,9 @@ function List() {
                         </TableRow>
                     </TableHead>  
                     <TableBody>
-                        {subjects.map(subject => (
+                        {subjects.map((subject, index) => (
                             <TableRow key={subject._id}>
-                                <TableCell>{subject._id}</TableCell>
+                                <TableCell>{index + 1}</TableCell>
                                 <TableCell>{subject.name}</TableCell>
                                 <TableCell>{subject.topics.length}</TableCell>
                                 <TableCell>
@@ -166,5 +166,3 @@ function DeleteConfirmationDialog({ open, onClose, onConfirm, subjectName }) {
         </Dialog>
     );
 }
-
-export { DeleteConfirmationDialog };

@@ -1,26 +1,23 @@
 import { useState } from 'react';
 import {
-
-Box,
-Button,
-TextField,
-Typography,
-Paper,
-CircularProgress,
-Snackbar,
+    Box,
+    Button,
+    TextField,
+    Typography,
+    Paper,
+    CircularProgress,
 } from '@mui/material';
 import axios from 'axios';
 import { API_URL } from '../../constant';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../slices/snackbarSlice';
 
 const Login = () => {
+    const dispatch = useDispatch();
+
     const [values, setValues] = useState({ username: '', password: '' });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [showSnackbar, setShowSnackbar] = useState(false);
-
-    const handleSnackbarClose = () => {
-        setShowSnackbar(false);
-    }
 
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
@@ -35,7 +32,10 @@ const Login = () => {
         .then((response) => {
             if (response.status === 200) {
                 console.log('Login successful:', response.data);
-                setShowSnackbar(true);
+                dispatch(showSnackbar({
+                    message: 'Login successful!',
+                    type: 'success',
+                }));
             }
             
             setLoading(false);
@@ -101,13 +101,6 @@ const Login = () => {
                 </form>
             </Paper>
         </Box>
-        <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            open={showSnackbar}
-            autoHideDuration={3000}
-            onClose={handleSnackbarClose}
-            message="Successfully logged in"
-        />
     </>
     );
 };

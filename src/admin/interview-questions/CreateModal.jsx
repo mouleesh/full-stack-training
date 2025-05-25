@@ -1,9 +1,9 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, TextareaAutosize, Typography } from '@mui/material'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
-import { API_URL } from '../../constant';
+import { API_URL } from '../../../constant';
 import { useDispatch } from 'react-redux';
-import { setQuestionsInStore } from '../slices/questionSlice';
+import { setQuestionsInStore } from '../../slices/questionSlice';
 
 const style = {
     position: 'absolute',
@@ -18,6 +18,7 @@ const style = {
 };
 
 const initialState = {
+    title: "",
     question: "",
     answer: "",
     subject: "",
@@ -26,11 +27,26 @@ const initialState = {
     example: ""
 }
 
-function CreateModal({open, handleClose, subjects, questionsFromStore}) {
+function CreateModal({open, handleClose, subjects, questionsFromStore, selectedQuestion}) {
     const dispatch = useDispatch();
     const [topics, setTopics] = useState([]);
 
     const [questionDetails, setQuestionDetails] = useState(initialState);
+
+    useEffect(() => {
+        if (selectedQuestion && open) {
+            setTopics(subjects.find(subject => subject._id === selectedQuestion.subject._id)?.topics || []);
+            setQuestionDetails({
+                title: selectedQuestion.title,
+                question: selectedQuestion.question,
+                answer: selectedQuestion.answer,
+                subject: selectedQuestion.subject._id,
+                topic: selectedQuestion.topic._id,
+                codeSnippet: selectedQuestion?.codeSnippet,
+                example: selectedQuestion?.example
+            });
+        }
+    }, [open, selectedQuestion]);
 
     const handleSubjectChange = (event) => {
         const subjectId = event.target.value;
@@ -50,6 +66,7 @@ function CreateModal({open, handleClose, subjects, questionsFromStore}) {
 
     const handleSubmit = () => {
         const payload = {
+            title: questionDetails.title,
             question: questionDetails.question,
             answer: questionDetails.answer,
             subject: questionDetails.subject,
@@ -58,15 +75,29 @@ function CreateModal({open, handleClose, subjects, questionsFromStore}) {
             example: questionDetails?.example
         };
 
-        axios.post(`${API_URL}/questions`, payload).then((response) => {
-            dispatch(setQuestionsInStore([...questionsFromStore, response.data]));
-            setQuestionDetails(initialState);
-            setTopics([]);
-            handleClose();
-            
-        }).catch((error) => {
-            console.error("Error creating question:", error);
-        });
+        if (selectedQuestion?._id) {
+            axios.put(`${API_URL}/questions/${selectedQuestion._id}`, payload)
+                .then((res) => {
+                    const updatedQuestions = questionsFromStore.map(q => 
+                        q._id === selectedQuestion._id ? res.data : q
+                    );
+                    dispatch(setQuestionsInStore(updatedQuestions));
+                    setQuestionDetails(initialState);
+                    setTopics([]);
+                    handleClose();
+                })
+                .catch((err) => console.error(err));
+        } else  {
+             axios.post(`${API_URL}/questions`, payload).then((response) => {
+                dispatch(setQuestionsInStore([...questionsFromStore, response.data]));
+                setQuestionDetails(initialState);
+                setTopics([]);
+                handleClose();
+
+            }).catch((error) => {
+                console.error("Error creating question:", error);
+            });
+        }
     }
 
     const handleReset = () => {
@@ -74,13 +105,18 @@ function CreateModal({open, handleClose, subjects, questionsFromStore}) {
         setTopics([]);
     }
 
+    const handleCloseLocal = () => {
+        handleClose();
+        handleReset();
+    }
+
     return (
         <Modal
             open={open}
-            onClose={handleClose}
+            onClose={handleCloseLocal}
             >
             <Box sx={style}>
-                <Typography variant="h5" component="h2" sx={{fontWeight: "bold"}}> Create Question </Typography>
+                <Typography variant="h5" component="h2" sx={{fontWeight: "bold"}}> {selectedQuestion ? "Update Question" : "Create Question"} </Typography>
 
                 <Box sx={{display: "flex", flexDirection: "column", gap: 2, marginTop: 2}}>
                     <FormControl fullWidth>
@@ -110,12 +146,21 @@ function CreateModal({open, handleClose, subjects, questionsFromStore}) {
                             ))}
                         </Select>
                     </FormControl>
+                    <TextareaAutosize 
+                        minRows={3}
+                        InputLabelProps={{ shrink: true }}
+                        value={questionDetails.title}
+                        onChange={(e) => setQuestionDetails({...questionDetails, title: e.target.value})}
+                        placeholder="Question Title"
+                        labelId="question-create-title"
+                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
+                    />
 
                     <TextareaAutosize 
                         minRows={5}
                         value={questionDetails.question}
                         onChange={(e) => setQuestionDetails({...questionDetails, question: e.target.value})}
-                        placeholder="Enter your question here"
+                        placeholder="Enter your detailed question here"
                         style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
                     />
 
@@ -145,7 +190,7 @@ function CreateModal({open, handleClose, subjects, questionsFromStore}) {
                     
                     <Grid container spacing={2} sx={{marginTop: 2, justifyContent: "center"}}>
                         <Grid item xs={4}>
-                            <Button onClick={handleSubmit} variant='contained'>Create</Button>
+                            <Button onClick={handleSubmit} variant='contained'>{selectedQuestion ? "Update" : "Create"}</Button>
                         </Grid>
                         <Grid item xs={4}>
                             <Button onClick={() => {handleReset();handleClose()}} variant='outlined'>Close</Button>
