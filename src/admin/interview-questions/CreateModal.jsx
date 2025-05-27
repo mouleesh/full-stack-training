@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, TextareaAutosize, Typography } from '@mui/material'
+import { Box, Button, FormControl, FormControlLabel, FormLabel, Grid, InputLabel, MenuItem, Modal, Radio, RadioGroup, Select, TextareaAutosize, TextField, Typography } from '@mui/material'
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { API_URL } from '../../../constant';
@@ -10,11 +10,13 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 700,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    height: "80vh",
+    overflowY: "auto",
 };
 
 const initialState = {
@@ -24,7 +26,8 @@ const initialState = {
     subject: "",
     topic: "",
     codeSnippet: "",
-    example: ""
+    example: "",
+    difficulty: "beginner" 
 }
 
 function CreateModal({open, handleClose, subjects, questionsFromStore, selectedQuestion}) {
@@ -43,7 +46,8 @@ function CreateModal({open, handleClose, subjects, questionsFromStore, selectedQ
                 subject: selectedQuestion.subject._id,
                 topic: selectedQuestion.topic._id,
                 codeSnippet: selectedQuestion?.codeSnippet,
-                example: selectedQuestion?.example
+                example: selectedQuestion?.example,
+                difficulty: selectedQuestion.difficulty,
             });
         }
     }, [open, selectedQuestion]);
@@ -72,7 +76,8 @@ function CreateModal({open, handleClose, subjects, questionsFromStore, selectedQ
             subject: questionDetails.subject,
             topic: questionDetails.topic,
             codeSnippet: questionDetails?.codeSnippet,
-            example: questionDetails?.example
+            example: questionDetails?.example,
+            difficulty: questionDetails.difficulty,
         };
 
         if (selectedQuestion?._id) {
@@ -126,6 +131,7 @@ function CreateModal({open, handleClose, subjects, questionsFromStore, selectedQ
                             value={questionDetails.subject}
                             label="Subject"
                             onChange={handleSubjectChange}
+                            style={{backgroundColor: "white"}}
                         >
                             {subjects.map(subject => (
                                 <MenuItem key={subject._id} value={subject._id}>{subject.name}</MenuItem>
@@ -140,53 +146,85 @@ function CreateModal({open, handleClose, subjects, questionsFromStore, selectedQ
                             value={questionDetails.topic}
                             label="Topic"
                             onChange={(e) => setQuestionDetails({...questionDetails, topic: e.target.value})}
+                            style={{backgroundColor: "white"}}
                         >
                             {topics.map(topic => (
                                 <MenuItem key={topic._id} value={topic._id}>{topic.name}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
-                    <TextareaAutosize 
-                        minRows={3}
-                        InputLabelProps={{ shrink: true }}
-                        value={questionDetails.title}
-                        onChange={(e) => setQuestionDetails({...questionDetails, title: e.target.value})}
-                        placeholder="Question Title"
-                        labelId="question-create-title"
-                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-                    />
+                    <FormControl fullWidth>
+                        {/* <InputLabel id="question-create-title">Question Title</InputLabel>  */}
+                        <TextField
+                            multiline 
+                            minRows={3}
+                            label="Question Title"
+                            value={questionDetails.title}
+                            onChange={(e) => setQuestionDetails({...questionDetails, title: e.target.value})}
+                            style={{backgroundColor: "white"}}
+                            labelId="question-create-title"
+                        />
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <TextField
+                            multiline 
+                            minRows={5}
+                            value={questionDetails.question}
+                            onChange={(e) => setQuestionDetails({...questionDetails, question: e.target.value})}
+                            style={{backgroundColor: "white"}}
+                            label="Detailed Question"
+                        />
+                    </FormControl>
+                    
+                    <FormControl fullWidth>
+                        <TextField
+                            multiline 
+                            minRows={5}
+                            value={questionDetails.answer}
+                            onChange={(e) => setQuestionDetails({...questionDetails, answer: e.target.value})}
+                            style={{backgroundColor: "white"}}
+                            label="Answer"
+                        />
+                    </FormControl>
+                    
+                    <FormControl fullWidth>
+                        <TextField
+                            multiline 
+                            minRows={5}
+                            value={questionDetails.codeSnippet}
+                            onChange={(e) => setQuestionDetails({...questionDetails, codeSnippet: e.target.value})}
+                            style={{backgroundColor: "white"}}
+                            label="Code Snippet (optional)"
+                        />
+                    </FormControl>
+                    
+                    <FormControl fullWidth>
+                        <TextField 
+                            multiline
+                            minRows={3}
+                            value={questionDetails.example}
+                            onChange={(e) => setQuestionDetails({...questionDetails, example: e.target.value})}
+                            style={{backgroundColor: "white"}}
+                            label="Example (optional)"
+                        />
+                    </FormControl>
 
-                    <TextareaAutosize 
-                        minRows={5}
-                        value={questionDetails.question}
-                        onChange={(e) => setQuestionDetails({...questionDetails, question: e.target.value})}
-                        placeholder="Enter your detailed question here"
-                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-                    />
-
-                    <TextareaAutosize 
-                        minRows={5}
-                        value={questionDetails.answer}
-                        onChange={(e) => setQuestionDetails({...questionDetails, answer: e.target.value})}
-                        placeholder="Answer"
-                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-                    />
-
-                    <TextareaAutosize 
-                        minRows={5}
-                        value={questionDetails.codeSnippet}
-                        onChange={(e) => setQuestionDetails({...questionDetails, codeSnippet: e.target.value})}
-                        placeholder="Code Snippet (optional)"
-                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-                    />
-
-                    <TextareaAutosize 
-                        minRows={5}
-                        value={questionDetails.example}
-                        onChange={(e) => setQuestionDetails({...questionDetails, example: e.target.value})}
-                        placeholder="Example (optional)"
-                        style={{padding: "10px", borderRadius: "5px", border: "1px solid #ccc" }}
-                    />
+                    {/* Below are the radio box which will capture the question difficulty level - Beginner, Intermediatary & Advanced */}
+                     <FormControl>
+                        <FormLabel id="question-create-difficulty">Difficulty Level</FormLabel>
+                        <RadioGroup
+                            row
+                            aria-labelledby="question-create-difficulty"
+                            name="difficulty"
+                            required
+                            value={questionDetails.difficulty}
+                            onChange={(e) => setQuestionDetails({...questionDetails, difficulty: e.target.value})}
+                        >
+                            <FormControlLabel value="beginner" control={<Radio />} label="Beginner" />
+                            <FormControlLabel value="intermediate" control={<Radio />} label="Intermediate" />
+                            <FormControlLabel value="advanced" control={<Radio />} label="Advanced" />
+                        </RadioGroup>
+                    </FormControl>
                     
                     <Grid container spacing={2} sx={{marginTop: 2, justifyContent: "center"}}>
                         <Grid item xs={4}>

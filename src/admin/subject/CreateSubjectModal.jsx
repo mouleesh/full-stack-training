@@ -87,6 +87,8 @@ export default function CreateSubjectModal({
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
+                    required
+                    style={{backgroundColor: "white"}}
                 />
                 {subjectDetails.topics.map((topic, index) => (
                     <Box
@@ -99,6 +101,7 @@ export default function CreateSubjectModal({
                             onChange={(e) => handleTopicChange(index, e.target.value)}
                             fullWidth
                             margin="normal"
+                            style={{backgroundColor: "white"}}
                         />
                         <IconButton
                             onClick={() => handleRemoveTopic(index)}

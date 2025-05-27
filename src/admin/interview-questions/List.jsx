@@ -87,13 +87,13 @@ function List() {
             renderCell: (params) => (
             <>
                 <IconButton onClick={() => { setAnswerModal(true); setSelectedQuestion(params.row); }}>
-                <Visibility color="primary" />
+                    <Visibility color='primary' />
                 </IconButton>
                 <IconButton onClick={() => { setCreateQuestionModal(true); setSelectedQuestion(params.row); }}>
-                <Edit color="primary" />
+                    <Edit color="primary" />
                 </IconButton>
                 <IconButton onClick={() => { setOpenDeleteConfirmation(true); setSelectedQuestion(params.row); }}>
-                <Delete color="error" />
+                    <Delete color="error" />
                 </IconButton>
             </>
             ),

@@ -20,26 +20,26 @@ import { API_URL } from "../../constant";
 import Contact from "./Contact";
 
 const features = [
-{
-    icon: <QuestionAnswerIcon color="primary" sx={{ fontSize: 40 }} />,
-    title: "Latest Interview Questions",
-    desc: "Stay updated with the most recent and frequently asked MERN stack interview questions.",
-},
-{
-    icon: <CodeIcon color="primary" sx={{ fontSize: 40 }} />,
-    title: "Simple Answers & Examples",
-    desc: "Get concise answers and practical code examples to help you understand concepts quickly.",
-},
-{
-    icon: <SchoolIcon color="primary" sx={{ fontSize: 40 }} />,
-    title: "Learn MERN Stack",
-    desc: "Master MongoDB, Express, React, and Node.js with our curated learning paths and resources.",
-},
-{
-    icon: <TrendingUpIcon color="primary" sx={{ fontSize: 40 }} />,
-    title: "Boost Your Career",
-    desc: "Prepare confidently for interviews and land your dream job in web development.",
-},
+    {
+        icon: <QuestionAnswerIcon color="primary" sx={{ fontSize: 40 }} />,
+        title: "Latest Interview Questions",
+        desc: "Stay updated with the most recent and frequently asked MERN stack interview questions.",
+    },
+    {
+        icon: <CodeIcon color="primary" sx={{ fontSize: 40 }} />,
+        title: "Simple Answers & Examples",
+        desc: "Get concise answers and practical code examples to help you understand concepts quickly.",
+    },
+    {
+        icon: <SchoolIcon color="primary" sx={{ fontSize: 40 }} />,
+        title: "Learn MERN Stack",
+        desc: "Master MongoDB, Express, React, and Node.js with our curated learning paths and resources.",
+    },
+    {
+        icon: <TrendingUpIcon color="primary" sx={{ fontSize: 40 }} />,
+        title: "Boost Your Career",
+        desc: "Prepare confidently for interviews and land your dream job in web development.",
+    }
 ];
 
 const Home = () => {

@@ -38,7 +38,11 @@ const Navigation = () => {
 
     return (
         <Box component="nav" sx={{ mt: "60px" }}>
-            <List sx={{ display: 'flex', flexDirection: 'row', backgroundColor: theme.palette.tertiary.main, padding: 0}}>
+            <List sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'row', 
+                    padding: 0
+                }}>
                 {subjects.map((subject) => (
                     <ListItem key={subject._id} disablePadding >
                         <ListItemButton
@@ -46,14 +50,14 @@ const Navigation = () => {
                             to={`/subjects/${subject._id}`}
                             onClick={() => setSelectedSubject(subject._id)}
                             sx={{
-                                p: 0,
-                                textAlign: 'center',
-
-                                // color: "white",
-                                bgcolor: selectedSubject === subject._id ? theme.palette.secondary.main : 'transparent',
+                                bgcolor: subject._id === subjectId ? theme.palette.primary.main : theme.palette.tertiary.main,
                                 '&:hover': {
-                                    bgcolor: theme.palette.secondary.main,
+                                    bgcolor: theme.palette.primary.main,
+                                    opacity: 0.5,
+                                    color: theme.palette.tertiary.main
                                 },
+                                textAlign: 'center',
+                                color: subject._id === subjectId ? theme.palette.tertiary.main : theme.palette.primary.main,
                             }}
                         >
                             <ListItemText primary={subject.name} />

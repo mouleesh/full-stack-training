@@ -16,6 +16,7 @@ import { useParams } from "react-router";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css"; 
 import Navigation from "./layout/Navigation";
+import { ArrowDropDown, FilterListAlt } from "@mui/icons-material";
 
 const LandingPage = () => {
     const [questions, setQuestions] = useState([]);
@@ -64,16 +65,46 @@ const LandingPage = () => {
                         width: "30%",
                         bgcolor: "#f5f7fa",
                         borderRight: "1px solid #e0e0e0",
-                        py: 3,
                     }}
-                >
-                    <Typography
-                        variant="h6"
-                        align="center"
-                        sx={{ mb: 2, color: "#333" }}
+                >   
+                    <div style={{ 
+                        marginBottom: "20px", 
+                        backgroundColor: "lightgrey", 
+                        height: 60, 
+                        display: "flex", 
+                        alignItems: "center", 
+                        justifyContent: "space-between", 
+                        padding: "0 20px"
+                    }}
                     >
-                        Questions
-                    </Typography>
+                        <Typography
+                            variant="h6"
+                            align="center"
+                            sx={{ 
+                                fontWeight: "bold", 
+                                fontSize: "1.2rem" 
+                            }}
+                        >
+                            Questions
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            size="small"
+                            sx={{ 
+                                height: 30, 
+                                minWidth: 60, 
+                                fontSize: "0.8rem", 
+                                textTransform: "none" 
+                            }}
+                            startIcon={<FilterListAlt />}
+                            endIcon={<ArrowDropDown />}
+                            onClick={() => {
+                                // Implement filter functionality here
+                                console.log("Filter button clicked");
+                            }}
+                        >Filter</Button>
+                    </div>
+
                     <List disablePadding>
                         {questions.map(q => (
                             <ListItem
@@ -108,6 +139,7 @@ const LandingPage = () => {
                         ))}
                     </List>
                 </Box>
+                
                 {/* Right Section */}
                 <Box sx={{ width: "70%", p: 5 }}>
                     <Typography color={theme.palette.primary.main} variant="h5" sx={{ mb: 2 }}>
