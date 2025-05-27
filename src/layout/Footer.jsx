@@ -1,11 +1,13 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 function Footer() {
+    const theme = useTheme();
+
     return  <>
         <Box
             sx={{
-                bgcolor: "#212121",
-                color: "#fff",
+                bgcolor: theme.palette.primary.main,
+                color: "#000000",
                 py: 1,
                 // mt: 2,
                 height: "20px",

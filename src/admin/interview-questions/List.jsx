@@ -1,5 +1,5 @@
 import { useEffect, useState, useTransition } from 'react'
-import { Box, Button, CircularProgress, IconButton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, IconButton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, Typography, useTheme } from '@mui/material'
 import CreateModal from './CreateModal';
 import AnswerModal from './AnswerModal';
 import axios from 'axios';
@@ -12,10 +12,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { DataGrid } from '@mui/x-data-grid';
+
 
 function List() {
     const [isPending, startTransition] = useTransition()
     const dispatch = useDispatch();
+    const theme = useTheme();
 
     const [subjects, setSubjects] = useState([]);
 
@@ -69,6 +72,34 @@ function List() {
             console.error("Error deleting question:", error);
         });
     }
+
+    const columns = [
+        { field: 'sno', headerName: 'S No.', flex: 1, renderCell: (params) => {
+            return params.api.getRowIndexRelativeToVisibleRows(params.id) + 1
+        }},
+        { field: 'subject', headerName: 'Subject',flex: 2, valueGetter: (params) => params.name },
+        { field: 'title', headerName: 'Title', flex: 3 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            flex: 2,
+            sortable: false,
+            renderCell: (params) => (
+            <>
+                <IconButton onClick={() => { setAnswerModal(true); setSelectedQuestion(params.row); }}>
+                <Visibility color="primary" />
+                </IconButton>
+                <IconButton onClick={() => { setCreateQuestionModal(true); setSelectedQuestion(params.row); }}>
+                <Edit color="primary" />
+                </IconButton>
+                <IconButton onClick={() => { setOpenDeleteConfirmation(true); setSelectedQuestion(params.row); }}>
+                <Delete color="error" />
+                </IconButton>
+            </>
+            ),
+        },
+    ];
+
     return (
         <>
             <Box sx={{p: 2, width: "100%", margin: "0 auto"}}>
@@ -81,46 +112,21 @@ function List() {
                 <div style={{position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
                     <CircularProgress />
                 </div> 
-                : 
-                <Table>
-                    <TableHead>
-                        <TableRow sx={{backgroundColor: "gainsboro"}}>
-                            <TableCell sx={{ fontWeight: "bold" }}>S No.</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Subject</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
-                            <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {questionsFromStore.map((question, index) => (
-                            <TableRow key={question?._id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>{question?.subject?.name}</TableCell>
-                                <TableCell>{question?.title}</TableCell>
-                                <TableCell>
-                                    <IconButton>
-                                        <Visibility color='primary' onClick={() => {
-                                            setAnswerModal(true); 
-                                            setSelectedQuestion(question)
-                                        }}  />
-                                    </IconButton>
-                                    <IconButton>
-                                        <Edit color='primary' onClick={() => {
-                                            setCreateQuestionModal(true);
-                                            setSelectedQuestion(question);
-                                        }} />
-                                    </IconButton>
-                                    <IconButton>
-                                        <Delete color={"error"} onClick={() => {
-                                            setOpenDeleteConfirmation(true);
-                                            setSelectedQuestion(question);
-                                        }} />
-                                    </IconButton>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>}
+                : (
+                    <div style={{ width: '100%' }}>
+                        <DataGrid
+                            rows={questionsFromStore}
+                            columns={columns}
+                            pageSize={10}
+                            getRowId={(row) => row._id}
+                            rowsPerPageOptions={[10, 20, 50]}
+                            disableSelectionOnClick
+                            sx={{
+                                bgcolor: theme.palette.background.paper,
+                                borderRadius: 2,
+                            }}
+                        />
+                    </div>)}
                 
             </Box>
             <CreateModal 

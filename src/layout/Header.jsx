@@ -8,13 +8,23 @@ function Header({hideLoginButton}) {
   const ColorSubHeader = ColorWrapperHOC(SubHeader);
 
   return (
-    <AppBar position="fixed" sx={{height: "60px", backgroundColor: "#353839"}}>
+    <AppBar position="fixed" sx={{height: "60px", backgroundColor: theme.palette.tertiary.main, }}>
         <Toolbar sx={{display: "flex", justifyContent: "space-between"}}>
             <div style={{display: "flex", alignItems: "center"}}>
               <Link to={"/"}>
-                <img src="/logo3.png" alt="logo" style={{width: "50px", height: "50px", marginRight: "24px"}} />
+                <img src="/logo.png" alt="logo" style={{width: "50px", height: "50px", marginRight: "24px"}} />
               </Link>
-              {/* <Typography variant='h6'>FULL STACK TRAINING</Typography> */}
+              <Typography
+                  variant="h2"
+                  color='primary'
+                  sx={{
+                      fontWeight: 600,
+                      fontSize: { xs: "1.2rem", md: "1.2rem" },
+                      letterSpacing: 0.5,
+                  }}
+              >
+                  CODERS MANUAL
+              </Typography>
             </div>
 
             {!hideLoginButton && <ColorSubHeader />}

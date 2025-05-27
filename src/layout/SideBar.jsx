@@ -14,13 +14,13 @@ function SideBar() {
     }
 
     return (
-        <Box position={"fixed"} component="nav" sx={{ width: 240, flexShrink: 0, backgroundColor: "lightgray", height: "100vh"}}>
+        <Box position={"fixed"} component="nav" sx={{ width: 240, flexShrink: 0, backgroundColor: "#626262", height: "100vh"}}>
             <nav>
             <List>
                 <ListItem className={'side-menu-option'} disablePadding sx={location.pathname === "/admin/dashboard" ? selectedMenuStyles : {}}>
                     <ListItemButton onClick={() => {navigate('dashboard')}}>
                         <ListItemIcon>
-                            <Dashboard sx={{color: location.pathname === "/admin/dashboard" ? "white" : ""}}/>
+                            <Dashboard sx={{color: location.pathname === "/admin/dashboard" ? "white" : theme.palette.primary.main}}/>
                         </ListItemIcon>
                         <ListItemText primary="Dashboard" />
                     </ListItemButton>
@@ -29,7 +29,7 @@ function SideBar() {
                 <ListItem disablePadding sx={location.pathname === "/admin/interview-questions" ? selectedMenuStyles : {}}>
                     <ListItemButton onClick={() => {navigate('interview-questions')}}>
                         <ListItemIcon>
-                            <QuestionAnswer sx={{color: location.pathname === "admin/interview-questions" ? "white" : ""}}/>
+                            <QuestionAnswer sx={{color: location.pathname === "/admin/interview-questions" ? "white" : theme.palette.primary.main}}/>
                         </ListItemIcon>
                         <ListItemText primary="Interview Questions" />
                     </ListItemButton>
@@ -38,7 +38,7 @@ function SideBar() {
                 <ListItem disablePadding sx={location.pathname === "/admin/subjects" ? selectedMenuStyles : {}}>
                     <ListItemButton onClick={() => {navigate('subjects')}}>
                         <ListItemIcon>
-                            <Subject sx={{color: location.pathname === "/admin/subjects" ? "white" : ""}}/>
+                            <Subject sx={{color: location.pathname === "/admin/subjects" ? "white" : theme.palette.primary.main}}/>
                         </ListItemIcon>
                         <ListItemText primary="Subjects & Topics" />
                     </ListItemButton>
@@ -47,7 +47,7 @@ function SideBar() {
                 <ListItem disablePadding sx={location.pathname === "/admin/users" ? selectedMenuStyles : {}}>
                     <ListItemButton onClick={() => {navigate('users')}}>
                         <ListItemIcon>
-                            <Group sx={{color: location.pathname === "/admin/users" ? "white" : ""}}/>
+                            <Group sx={{color: location.pathname === "/admin/users" ? "white" : theme.palette.primary.main}}/>
                         </ListItemIcon>
                         <ListItemText primary="Manage Users" />
                     </ListItemButton>
@@ -56,7 +56,7 @@ function SideBar() {
                 <ListItem disablePadding sx={location.pathname === "/admin/contact-form" ? selectedMenuStyles : {}}>
                     <ListItemButton onClick={() => {navigate('contact-form')}}>
                         <ListItemIcon>
-                            <MarkUnreadChatAlt sx={{color: location.pathname === "/admin/contact-form" ? "white" : ""}}/>
+                            <MarkUnreadChatAlt sx={{color: location.pathname === "/admin/contact-form" ? "white" : theme.palette.primary.main}}/>
                         </ListItemIcon>
                         <ListItemText primary="Contact Form" />
                     </ListItemButton>

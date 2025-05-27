@@ -2,7 +2,6 @@ import SchoolIcon from "@mui/icons-material/School";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import CodeIcon from "@mui/icons-material/Code";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-
 import {
     Box,
     Typography,
@@ -10,13 +9,10 @@ import {
     Grid,
     Card,
     CardContent,
-    AppBar,
-    Toolbar,
     Container,
     Paper, 
     useTheme,
-    TextField,
-    TextareaAutosize} from "@mui/material";
+} from "@mui/material";
 import { Link } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -30,17 +26,17 @@ const features = [
     desc: "Stay updated with the most recent and frequently asked MERN stack interview questions.",
 },
 {
-    icon: <CodeIcon color="secondary" sx={{ fontSize: 40 }} />,
+    icon: <CodeIcon color="primary" sx={{ fontSize: 40 }} />,
     title: "Simple Answers & Examples",
     desc: "Get concise answers and practical code examples to help you understand concepts quickly.",
 },
 {
-    icon: <SchoolIcon color="success" sx={{ fontSize: 40 }} />,
+    icon: <SchoolIcon color="primary" sx={{ fontSize: 40 }} />,
     title: "Learn MERN Stack",
     desc: "Master MongoDB, Express, React, and Node.js with our curated learning paths and resources.",
 },
 {
-    icon: <TrendingUpIcon color="warning" sx={{ fontSize: 40 }} />,
+    icon: <TrendingUpIcon color="primary" sx={{ fontSize: 40 }} />,
     title: "Boost Your Career",
     desc: "Prepare confidently for interviews and land your dream job in web development.",
 },
@@ -91,12 +87,16 @@ const Home = () => {
             {/* Hero Section */}
             <Box
                 sx={{
+                    display: "flex",
+                    justifyContent: "space-around",
                     py: { xs: 6, md: 10 },
                     px: 2,
                     background: `linear-gradient(90deg, ${theme.palette.primary.main} 60%, #fff 100%)`,
                     color: "#fff",
                 }}
-            >
+            >   
+                <img src="/boy.png" alt="Hero" style={{ width: "100%", maxWidth: "350px" }} />
+
                 <Container maxWidth="md">
                     <Typography
                         variant="h2"
@@ -109,23 +109,26 @@ const Home = () => {
                     >
                         Ace Your MERN Stack Interviews
                     </Typography>
-                    <Typography variant="h5" sx={{ mb: 4, color: "#e3f2fd" }}>
+                    <Typography variant="h5" sx={{ mb: 4, color: theme.palette.tertiary.main }}>
                         The ultimate platform to learn, practice, and master MERN stack interview questions with clear answers and real-world examples.
                     </Typography>
-                    <Button
-                        variant="contained"
-                        color="tertiary"
-                        size="large"
-                        sx={{
-                            fontWeight: 700,
-                            px: 4,
-                            py: 1.5,
-                            borderRadius: 1,
-                            boxShadow: 2,
-                        }}
-                    >
-                        <Link to={`/subjects/${subjectId}`} style={{textDecoration: "none"}}> Get Started </Link>
-                    </Button>
+                    <Link to={`/subjects/${subjectId}`} style={{textDecoration: "none"}}>
+                        <Button
+                            variant="contained"
+                            color="tertiary"
+                            size="large"
+                            sx={{
+                                fontWeight: 700,
+                                px: 4,
+                                py: 1.5,
+                                borderRadius: 1,
+                                boxShadow: 2,
+                                color: theme.palette.primary.main
+                            }}
+                        >
+                            Get Started 
+                        </Button>
+                    </Link>
                 </Container>
             </Box>
 
@@ -134,9 +137,9 @@ const Home = () => {
                 <Typography
                     variant="h4"
                     align="center"
-                    sx={{ fontWeight: 700, mb: 4, color: "#1976d2" }}
+                    sx={{ fontWeight: 700, mb: 4, color: theme.palette.primary.main }}
                 >
-                    Why Choose MERN Interview Hub?
+                    Why Choose Coders Manual?
                 </Typography>
                 <Grid sx={{ display: "flex", justifyContent: "center", direction: "row", gap: 2}}>
                     {features.map((feature, idx) => (
@@ -180,17 +183,17 @@ const Home = () => {
                 >
                     <Typography
                         variant="h5"
-                        sx={{ fontWeight: 700, mb: 2, color: "#1976d2" }}
+                        sx={{ fontWeight: 700, mb: 2, color: theme.palette.primary.main }}
                     >
-                        About MERN Interview Hub
+                        About Coders Manual
                     </Typography>
                     <Typography variant="body1" sx={{ color: "#424242" }}>
-                        MERN Interview Hub is your one-stop solution for preparing for MERN stack interviews. Whether you are a beginner or an experienced developer, our platform offers a comprehensive collection of the latest interview questions, clear and concise answers, and practical code examples. Our mission is to help you learn efficiently and succeed in your career.
+                        Coders Manual is your one-stop solution for preparing for MERN stack interviews. Whether you are a beginner or an experienced developer, our platform offers a comprehensive collection of the latest interview questions, clear and concise answers, and practical code examples. Our mission is to help you learn efficiently and succeed in your career.
                     </Typography>
                     <br />
                     <b>What you get:</b>
                     <ul style={{ color: "#424242", listStyleType: "disc", paddingLeft: "20px"}}>
-                        <li style={{ marginBottom: "8px" }}>Handpicked questions covering MongoDB, Express, React, and Node.js</li>
+                        <li style={{ marginBottom: "8px" }}>Handpicked questions covering MongoDB, Express, React, Node.js, Html & CSS</li>
                         <li style={{ marginBottom: "8px" }}>Easy-to-understand answers and code snippets</li>
                         <li style={{ marginBottom: "8px" }}>Regularly updated content to match industry trends</li>
                         <li>Learning paths and tips for cracking interviews</li>
@@ -203,37 +206,44 @@ const Home = () => {
             <Box
                 id="get-started"
                 sx={{
+                    display: "flex",
+                    alignItems: "center",
                     py: 6,
                     background: `linear-gradient(90deg, ${theme.palette.primary.main} 60%, #fff 100%)`,
                     color: "#fff",
                     textAlign: "center",
                 }}
             >
-                <Container maxWidth="sm">
+                <Container>
                     <Typography
                         variant="h4"
                         sx={{ fontWeight: 700, mb: 2, letterSpacing: 1 }}
                     >
                         Ready to Start Learning?
                     </Typography>
-                    <Typography variant="h6" sx={{ mb: 4, color: "#e3f2fd" }}>
+                    <Typography variant="h6" sx={{ mb: 4 }}>
                         Explore our question bank and boost your MERN stack skills today!
                     </Typography>
-                    <Button
-                        variant="contained"
-                        color="tertiary"
-                        size="large"
-                        sx={{
-                            fontWeight: 700,
-                            px: 4,
-                            py: 1.5,
-                            borderRadius: 1,
-                            boxShadow: 2,
-                        }}
-                    >
-                        <Link style={{textDecoration: "none"}} to={`/subjects/${subjectId}`}> Browse Questions </Link>
-                    </Button>
+                    <Link style={{textDecoration: "none"}} to={`/subjects/${subjectId}`}>
+                        <Button
+                            variant="contained"
+                            color="tertiary"
+                            size="large"
+                            sx={{
+                                fontWeight: 700,
+                                px: 4,
+                                py: 1.5,
+                                borderRadius: 1,
+                                boxShadow: 2,
+                                color: theme.palette.primary.main,
+                            }}
+                        >
+                            Browse Questions 
+                        </Button>
+                    </Link>
                 </Container>
+
+                <img src="/girl.png" alt="Hero" style={{ width: "100%", maxWidth: "250px", marginRight: "200px" }} />
             </Box>
             
             {/* Contact Section */}

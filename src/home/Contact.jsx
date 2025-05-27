@@ -1,10 +1,14 @@
-import { Box, Button, Container, Paper, TextareaAutosize, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, Paper, TextareaAutosize, TextField, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../slices/snackbarSlice";
+import axios from "axios";
+import { API_URL } from "../../constant";
 
 function Contact() {
     const dispatch = useDispatch();
+    const theme = useTheme();
+
     const [contact, setContact] = useState({
         name: "",
         mobile: "",
@@ -15,25 +19,40 @@ function Contact() {
     // Function to validate the contact form and send the request to API.
     const handleRequestCallback = () => {
         if (!contact.name || !contact.mobile || !contact.message) {
-            alert("Please fill in all required fields.");
+            dispatch(showSnackbar({
+                message: "Please fill in all the fields!",
+                type: "error"
+            }));
             return;
         }
 
-        // Here you would typically send the contact data to your backend API.
-        // For demonstration, we'll just log it to the console.
-        console.log("Contact Request:", contact);
+        if (contact.mobile && !/^\d{10}$/.test(contact.mobile)) {
+            dispatch(showSnackbar({
+                message: "Please check the mobile number!"
+            }));
+        }
         
-        // Reset the form after submission
-        setContact({
-            name: "",
-            mobile: "",
-            email: "",
-            message: ""
+        axios.post(`${API_URL}/contact-form`, contact).then(() => {
+            // Reset the form after submission
+            setContact({
+                name: "",
+                mobile: "",
+                email: "",
+                message: ""
+            });
+            dispatch(showSnackbar({
+                message: "Your request has been submitted successfully!",
+                type: "success"
+            }));
+        }).catch((error) => {
+            console.log("Unable to submit the contact request form", error);
+
+            dispatch(showSnackbar({
+                message: "Something went wrong, Please try again later!",
+                type: "error"
+            }))
+            
         });
-        dispatch(showSnackbar({
-            message: "Your request has been submitted successfully!",
-            type: "success"
-        }))
     }
 
     return (
@@ -48,7 +67,7 @@ function Contact() {
         >
             <Typography
                 variant="h5"
-                sx={{ fontWeight: 700, mb: 1, color: "#1976d2" }}
+                sx={{ fontWeight: 700, mb: 1, color: theme.palette.primary.main }}
             >
                 Contact Us
             </Typography>
@@ -149,7 +168,7 @@ function Contact() {
                             variant="contained"
                             color="primary"
                             onClick={handleRequestCallback}
-                            sx={{ mt: 2, fontWeight: 700, borderRadius: 1 }}
+                            sx={{ mt: 2, fontWeight: 700, borderRadius: 1, color: theme.palette.tertiary.main }}
                             type="submit"
                         >
                             Request Callback

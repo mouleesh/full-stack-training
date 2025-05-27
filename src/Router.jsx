@@ -8,6 +8,7 @@ import PublicLayout from './layout/PublicLayout';
 import LandingPage from './LandingPage';
 import Snackbar from './components/Snackbar';
 import Users from './admin/user/List';
+import ContactForm from './admin/contact-form/List';
 
 function Router() {
   return (
@@ -25,7 +26,7 @@ function Router() {
             <Route path='dashboard' element={<p>This is dashboard comp</p>} />
             <Route path='subjects' element={<Subjects/>} />
             <Route path='users' element={<Users />} />
-            <Route path='contact-form' element={<p>This is contact form comp</p>} />
+            <Route path='contact-form' element={<ContactForm />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path='*' element={<NotFoundPage />} />

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
     Box,
+    Button,
     Paper,
     Typography,
     List,
@@ -19,6 +20,8 @@ import Navigation from "./layout/Navigation";
 const LandingPage = () => {
     const [questions, setQuestions] = useState([]);
     const [selectedId, setSelectedId] = useState("");
+    const [copied, setCopied] = useState(false);
+
     const selectedQuestion = questions.find(q => q._id === selectedId);
     const theme = useTheme();
     const {subjectId} = useParams();
@@ -127,10 +130,24 @@ const LandingPage = () => {
                         </Box>
                     )}
                     {selectedQuestion?.codeSnippet && (
-                        <Box sx={{ mt: 3, bgcolor: "gainsboro", p: 2, borderRadius: 2}}>
+                        <Box sx={{ mt: 3, bgcolor: "gainsboro", p: 2, borderRadius: 2, position: "relative" }}>
                             <Typography variant="subtitle1" sx={{ mb: 1, color: theme.palette.primary.main, fontWeight: "bold" }}>
                                 Code
                             </Typography>
+                            <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+                                <Button
+                                    size="small"
+                                    sx={{height: 20, minWidth: 60, fontSize: "0.8rem", textTransform: "none"}}
+                                    variant="contained"
+                                    onClick={async () => {
+                                        await navigator.clipboard.writeText(selectedQuestion.codeSnippet);
+                                        setCopied(true);
+                                        setTimeout(() => setCopied(false), 1500);
+                                    }}
+                                >
+                                    {copied ? "Copied!" : "Copy"}
+                                </Button>
+                            </Box>
                             <Paper
                                 sx={{
                                     bgcolor: "white",
@@ -143,7 +160,7 @@ const LandingPage = () => {
                                     whiteSpace: "pre-wrap",
                                 }}
                             >
-                                <pre style={{ margin: 0 }}> <code dangerouslySetInnerHTML={{
+                                <pre style={{ margin: 0 }}><code dangerouslySetInnerHTML={{
                                     __html: hljs.highlight(selectedQuestion.codeSnippet, { language: 'javascript' }).value
                                 }}/></pre>
                             </Paper>

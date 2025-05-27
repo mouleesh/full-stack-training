@@ -1,5 +1,5 @@
 import { AddCircle, Delete, Edit, Visibility } from '@mui/icons-material';
-import { Box, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { Box, Button, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Typography, useTheme } from '@mui/material'
 import React, { useEffect } from 'react'
 import ListTopicModal from './ListTopicModal';
 import "./subject.css";
@@ -11,8 +11,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { API_URL } from '../../../constant';
+import { DataGrid } from '@mui/x-data-grid';
 
 function List() {
+    const theme = useTheme();
+    
     const [subjects, setSubjects] = React.useState([]);
     const [createSubjectModalOpen, setCreateSubjectModalOpen] = React.useState(false);
     const [isTopicModalOpen, setIsTopicModalOpen] = React.useState(false);
@@ -59,6 +62,33 @@ function List() {
         });
     }
 
+     const columns = [
+        { field: 'sno', headerName: 'S No.', flex: 1, renderCell: (params) => {
+            return params.api.getRowIndexRelativeToVisibleRows(params.id) + 1
+        } },
+        { field: 'name', headerName: 'Subject Name', flex: 3 },
+        { field: 'topics', headerName: '# of Topics', flex: 1, valueGetter: (params) => params.length || 0 },
+        {
+            field: 'actions',
+            headerName: 'Actions',
+            flex: 2,
+            sortable: false,
+            renderCell: (params) => (
+                <Box sx={{ display: "flex" }}>
+                    <IconButton onClick={() => { setSelectedSubject(params.row); setIsTopicModalOpen(true); }}>
+                        <Visibility color='primary' />
+                    </IconButton>
+                    <IconButton onClick={() => { setSelectedSubject(params.row); setCreateSubjectModalOpen(true); }}>
+                        <Edit color='primary' />
+                    </IconButton>
+                    <IconButton onClick={() => { setSelectedSubject(params.row); setDeleteConfirmationOpen(true); }}>
+                        <Delete color='error' />
+                    </IconButton>
+                </Box>
+            ),
+        },
+    ];
+
     return (
         <>
             <ListTopicModal 
@@ -90,55 +120,20 @@ function List() {
                     <Typography variant='h5' sx={{fontWeight: "bold"}}>Subjects</Typography>
                     <Button onClick={() => setCreateSubjectModalOpen(true)} variant='contained' startIcon={<AddCircle />}>Create Subject</Button>
                 </div>
-                <Table>
-                    <TableHead>
-                        <TableRow sx={{backgroundColor: "gainsboro"}}>
-                            <TableCell sx={{fontWeight: "bold"}}>S No.</TableCell>
-                            <TableCell sx={{fontWeight: "bold"}}>Subject Name</TableCell>
-                            <TableCell sx={{fontWeight: "bold"}}># of Topics</TableCell>
-                            <TableCell sx={{fontWeight: "bold"}}>Actions</TableCell>                 
-                        </TableRow>
-                    </TableHead>  
-                    <TableBody>
-                        {subjects.map((subject, index) => (
-                            <TableRow key={subject._id}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>{subject.name}</TableCell>
-                                <TableCell>{subject.topics.length}</TableCell>
-                                <TableCell>
-                                    <Box sx={{display: "flex"}}>
-                                        <IconButton>
-                                            <Visibility 
-                                                color='primary'
-                                                onClick={() => {
-                                                    setSelectedSubject(subject);
-                                                    setIsTopicModalOpen(true); 
-                                                }} />
-                                        </IconButton>
-                                        <IconButton>
-                                            <Edit 
-                                                color='primary' 
-                                                onClick={() => {
-                                                    setSelectedSubject(subject);
-                                                    setCreateSubjectModalOpen(true);
-                                                }}/>
-                                        </IconButton>
-                                        <IconButton>
-                                            <Delete 
-                                                color='error'
-                                                onClick={() => {
-                                                    setSelectedSubject(subject);
-                                                    setDeleteConfirmationOpen(true)
-                                                }} 
-                                            />
-                                        </IconButton>
-                                        
-                                    </Box>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <div style={{ width: "100%" }}>
+                    <DataGrid
+                        rows={subjects}
+                        columns={columns}
+                        getRowId={(row) => row._id}
+                        pageSize={10}
+                        rowsPerPageOptions={[10, 20, 50]}
+                        disableSelectionOnClick
+                        sx={{
+                            bgcolor: theme.palette.background.paper,
+                            borderRadius: 2,
+                        }}
+                    />
+                </div>
             </Box>
         </>          
     )
