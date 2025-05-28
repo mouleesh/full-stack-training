@@ -20,7 +20,7 @@ const defaultUser = {
     status: 'active',
 };
 
-const roles = ['admin', 'user'];
+const roles = ['admin', 'user', 'contributor'];
 
 const CreateUserModal = ({ open, onClose, onSubmit, initialData }) => {
     const [user, setUser] = useState(initialData || defaultUser);

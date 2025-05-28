@@ -16,12 +16,22 @@ import { useParams } from "react-router";
 import hljs from "highlight.js";
 import "highlight.js/styles/github.css"; 
 import Navigation from "./layout/Navigation";
-import { ArrowDropDown, FilterListAlt } from "@mui/icons-material";
+import { FilterList, SwapVert } from "@mui/icons-material";
+import Popover from "@mui/material/Popover";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const LandingPage = () => {
     const [questions, setQuestions] = useState([]);
     const [selectedId, setSelectedId] = useState("");
     const [copied, setCopied] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [difficulty, setDifficulty] = useState({
+        Beginner: true,
+        Intermediate: true,
+        Advanced: true,
+    });
 
     const selectedQuestion = questions.find(q => q._id === selectedId);
     const theme = useTheme();
@@ -37,6 +47,29 @@ const LandingPage = () => {
             })
         }
     }, [subjectId])
+
+    const handleFilterClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDifficultyChange = (event) => {
+        setDifficulty({
+            ...difficulty,
+            [event.target.name]: event.target.checked,
+        });
+    };
+
+    const handleApplyFilter = () => {
+        // You can implement the actual filter logic here
+        // For now, just close the popover
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (<>
         <Navigation />
@@ -87,26 +120,31 @@ const LandingPage = () => {
                         >
                             Questions
                         </Typography>
-                        <Button
-                            variant="contained"
-                            size="small"
-                            sx={{ 
-                                height: 30, 
-                                minWidth: 60, 
-                                fontSize: "0.8rem", 
-                                textTransform: "none" 
-                            }}
-                            startIcon={<FilterListAlt />}
-                            endIcon={<ArrowDropDown />}
-                            onClick={() => {
-                                // Implement filter functionality here
-                                console.log("Filter button clicked");
-                            }}
-                        >Filter</Button>
+
+                        <div style={{ display: "flex", gap: "10px" }}>
+                            <Button
+                                variant="contained"
+                                size="small"
+                                sx={{ 
+                                    height: 30, 
+                                    minWidth: 60, 
+                                    fontSize: "0.8rem", 
+                                    textTransform: "none" 
+                                }}
+                                startIcon={<FilterList />}
+                                onClick={(e) => {
+                                    // Implement filter functionality here
+                                    console.log("Filter button clicked");
+                                    handleFilterClick(e)
+                                }}>Filter</Button>
+                            {/* <B
+                            Sort</Button> */}
+                        </div>
                     </div>
 
+
                     <List disablePadding>
-                        {questions.map(q => (
+                        {questions.map((q, i) => (
                             <ListItem
                                 key={q._id}
                                 disablePadding
@@ -128,7 +166,7 @@ const LandingPage = () => {
                                     }}
                                 >
                                     <ListItemText
-                                        primary={q.title}
+                                        primary={`${i+1}. ${q.title}`}
                                         primaryTypographyProps={{
                                             fontWeight: selectedId === q._id ? "bold" : "normal",
                                             color: selectedId === q._id ? theme.palette.primary.main : "#222",
@@ -201,8 +239,83 @@ const LandingPage = () => {
                 </Box>
             </Paper>
         </Box>
+
+        <FilterPopover 
+            open={open}
+            anchorEl={anchorEl}
+            handleClose={handleClose}
+            difficulty={difficulty}
+            handleApplyFilter={handleApplyFilter}
+            handleDifficultyChange={handleDifficultyChange}
+        />
     </>
     );
 };
 
 export default LandingPage;
+
+
+
+function FilterPopover({ open, anchorEl, handleClose, difficulty, handleApplyFilter, handleDifficultyChange }) {
+
+    return (<Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+        }}
+        transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+        }}
+    >
+        <Box sx={{ p: 2, minWidth: 200 }}>
+            <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                Filter by Difficulty
+            </Typography>
+            <FormGroup>
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={difficulty.Beginner}
+                            onChange={handleDifficultyChange}
+                            name="Beginner"
+                        />
+                    }
+                    label="Beginner"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={difficulty.Intermediate}
+                            onChange={handleDifficultyChange}
+                            name="Intermediate"
+                        />
+                    }
+                    label="Intermediate"
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            checked={difficulty.Advanced}
+                            onChange={handleDifficultyChange}
+                            name="Advanced"
+                        />
+                    }
+                    label="Advanced"
+                />
+            </FormGroup>
+            <Button
+                variant="contained"
+                size="small"
+                sx={{ mt: 2 }}
+                onClick={handleApplyFilter}
+                fullWidth
+            >
+                Apply Filter
+            </Button>
+        </Box>
+    </Popover>)
+}

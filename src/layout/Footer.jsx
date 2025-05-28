@@ -12,7 +12,7 @@ function Footer() {
                 // mt: 2,
                 height: "20px",
                 textAlign: "center",
-                position: "relative"
+                position: "relative",
             }}>
             <Typography variant="body2">
                 © {new Date().getFullYear()} MERN Interview Hub. All rights reserved.

@@ -129,6 +129,7 @@ function Contact() {
                                 variant="outlined"
                                 size="small"
                                 fullWidth
+                                style={{ backgroundColor: "white" }}
                             />
                             <TextField
                                 label="Mobile Number"
@@ -139,6 +140,7 @@ function Contact() {
                                 size="small"
                                 type="tel"
                                 fullWidth
+                                style={{ backgroundColor: "white" }}
                             />
                             <TextField
                                 label="Email (optional)"
@@ -149,18 +151,16 @@ function Contact() {
                                 onChange={(e) => setContact({ ...contact, email: e.target.value })}
                                 type="email"
                                 fullWidth
+                                style={{ backgroundColor: "white" }}
                             />
-                            <TextareaAutosize 
+                            <TextField 
+                                multiline
                                 minRows={3}
                                 name="message"
                                 value={contact.message}
                                 onChange={(e) => setContact({ ...contact, message: e.target.value })}
-                                placeholder="Your Message"
-                                style={{
-                                    padding: "10px",
-                                    borderRadius: "5px",
-                                    border: "1px solid #ccc",
-                                }}
+                                label="Your Message"
+                                style={{ backgroundColor: "white" }}
                             />
                         </Box>
                         <Button

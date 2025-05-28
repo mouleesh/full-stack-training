@@ -66,38 +66,23 @@ const Home = () => {
 
     return (
         <Box sx={{ bgcolor: "#f5f7fa", minHeight: "100vh", mt: "60px" }}>
-            {/* AppBar */}
-            {/* <AppBar position="static" sx={{ bgcolor: "#212121" }}>
-                <Toolbar>
-                    <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
-                        MERN Interview Hub
-                    </Typography>
-                    <Button color="inherit" href="#features">
-                        Features
-                    </Button>
-                    <Button color="inherit" href="#about">
-                        About
-                    </Button>
-                    <Button color="inherit" href="#get-started">
-                        Get Started
-                    </Button>
-                </Toolbar>
-            </AppBar> */}
-
             {/* Hero Section */}
             <Box
                 sx={{
                     display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    alignItems: "center",
                     justifyContent: "space-around",
-                    py: { xs: 6, md: 10 },
-                    px: 2,
-                    background: `linear-gradient(90deg, ${theme.palette.primary.main} 60%, #fff 100%)`,
+                    py: { xs: 4, md: 10 },
+                    px: { xs: 1, md: 2 },
+                    background: `linear-gradient(90deg, ${theme.palette.primary.main} 70%, #fff 100%)`,
                     color: "#fff",
+                    gap: { xs: 3, md: 0 },
                 }}
             >   
-                <img src="/boy.png" alt="Hero" style={{ width: "100%", maxWidth: "350px" }} />
+                <img src="/boy.png" alt="Hero" style={{ width: "100%", maxWidth: 350, margin: "0 auto" }} />
 
-                <Container maxWidth="md">
+                <Container maxWidth="md" sx={{ textAlign: { xs: "center", md: "left" } }}>
                     <Typography
                         variant="h2"
                         sx={{
@@ -141,12 +126,20 @@ const Home = () => {
                 >
                     Why Choose Coders Manual?
                 </Typography>
-                <Grid sx={{ display: "flex", justifyContent: "center", direction: "row", gap: 2}}>
+                <Grid sx={{ 
+                    display: "flex", 
+                    justifyContent: "center", 
+                    direction: "row", 
+                    gap: 2, 
+                    flexWrap: { xs: "nowrap", md: "wrap" },
+                    overflowX: { xs: "auto", md: "visible" }
+                }}>
                     {features.map((feature, idx) => (
                         <div key={idx}>
                             <Card
                                 sx={{
                                     height: 240,
+                                    width: 270,
                                     borderRadius: 3,
                                     boxShadow: 3,
                                     transition: "transform 0.2s",
@@ -209,7 +202,7 @@ const Home = () => {
                     display: "flex",
                     alignItems: "center",
                     py: 6,
-                    background: `linear-gradient(90deg, ${theme.palette.primary.main} 60%, #fff 100%)`,
+                    background: `linear-gradient(90deg, #fff 0%, ${theme.palette.primary.main} 30%, ${theme.palette.primary.main} 70%, #fff 100%)`,
                     color: "#fff",
                     textAlign: "center",
                 }}
@@ -243,8 +236,64 @@ const Home = () => {
                     </Link>
                 </Container>
 
-                <img src="/girl.png" alt="Hero" style={{ width: "100%", maxWidth: "250px", marginRight: "200px" }} />
+                <img src="/girl.png" alt="Hero" style={{ width: "100%", maxWidth: "250px", marginRight: "400px", height: "auto" }} />
             </Box>
+
+            {/* Top Contributors */}
+            <Container maxWidth="lg" sx={{ my: 8 }}>
+                <Typography
+                    variant="h5"
+                    align="center"
+                    sx={{ fontWeight: 700, mb: 4, color: theme.palette.primary.main }}
+                >
+                    Top Contributors
+                </Typography>
+                <Grid container spacing={4} justifyContent="center">
+                    {[0, 1, 2].map((idx) => (
+                        <Grid item xs={12} sm={6} md={4} key={idx}>
+                            <Paper
+                                elevation={3}
+                                sx={{
+                                    p: 3,
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    borderRadius: 4,
+                                    background: "#fff",
+                                    minHeight: 260,
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: 90,
+                                        height: 90,
+                                        borderRadius: "50%",
+                                        overflow: "hidden",
+                                        mb: 2,
+                                        border: `3px solid ${theme.palette.primary.main}`,
+                                        boxShadow: 2,
+                                    }}
+                                >
+                                    <img
+                                        src={`/avatar.png`}
+                                        alt={`Contributor ${idx + 1}`}
+                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    />
+                                </Box>
+                                <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+                                    {["Maniarasan", "Ravi Teja", "Mouleesh Guru"][idx]}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: "#616161", mb: 1 }}>
+                                    {["Full Stack Developer", "React Specialist", "MERN Mentor"][idx]}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: "#757575" }}>
+                                    {["120", "98", "85"][idx]} questions created
+                                </Typography>
+                            </Paper>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
             
             {/* Contact Section */}
             <Contact />
